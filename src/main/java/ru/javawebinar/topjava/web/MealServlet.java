@@ -17,15 +17,14 @@ public class MealServlet extends HttpServlet {
     private MealService mealService;
 
     public void init() {
-        LOG.debug("mealservlet created");
         this.mealService = new MealServiceImpl(new MealRepoByList());
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        LOG.debug("/meal accessed");
         int caloriesDayLimit = 2000;
         req.setAttribute("mealList", mealService.findAllWithExcesses(caloriesDayLimit));
+        LOG.debug("redirected to meals.jsp");
         req.getRequestDispatcher("meals.jsp").forward(req, resp);
     }
 }

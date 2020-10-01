@@ -7,7 +7,7 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MealRepoByList implements Repository<Meal>{
+public class MealRepoByList implements Repository<Meal> {
     private final List<Meal> STORAGE = new ArrayList<>();
 
     {

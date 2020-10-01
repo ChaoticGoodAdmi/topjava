@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface MealService {
     List<Meal> findAll();
+
     List<MealTo> findAllWithExcesses(int caloriesDayLimit);
 }

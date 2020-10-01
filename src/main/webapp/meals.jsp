@@ -22,7 +22,7 @@
     <c:forEach var="meal" items="${mealList}">
         <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
         <tr id="<c:out value="${meal.excess ? 'excess' : 'not-excess'}" />">
-            <td><javatime:format value="${meal.dateTime}" style="SS" /></td>
+            <td><javatime:format value="${meal.dateTime}" style="SS"/></td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
             <td><a href="">Update</a></td>
