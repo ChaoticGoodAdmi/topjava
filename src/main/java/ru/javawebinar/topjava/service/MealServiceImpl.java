@@ -32,13 +32,11 @@ public class MealServiceImpl implements MealService {
     @Override
     public void updateInRepo(Meal meal) {
         repo.update(meal);
-        LOG.debug(meal.toString() + " updated");
     }
 
     @Override
     public void deleteFromRepo(int id) {
         repo.delete(id);
-        LOG.debug("Meal #" + id + " deleted");
     }
 
     @Override

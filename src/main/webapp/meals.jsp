@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://sargue.net/jsptags/time" prefix="javatime" %>
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
 <html lang="ru">
 <head>
     <title>Meals</title>
@@ -10,6 +10,9 @@
 <h3><a href="index.html">Home</a></h3>
 <hr>
 <h2>Meals</h2>
+<a href="meals?id=&action=update">Add meal</a>
+<br>
+<br>
 <table>
     <tr>
         <th>Date</th>
@@ -32,5 +35,7 @@
     <tr>
     </tr>
 </table>
+<br>
+<a href="meals?action=limit">Change calories limit</a>
 </body>
 </html>
