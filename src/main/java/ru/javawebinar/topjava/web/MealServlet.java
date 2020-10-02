@@ -2,7 +2,7 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.javawebinar.topjava.repo.MealRepoByList;
+import ru.javawebinar.topjava.repo.MealRepoInMemory;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.service.MealServiceImpl;
 
@@ -17,12 +17,12 @@ public class MealServlet extends HttpServlet {
     private MealService mealService;
 
     public void init() {
-        this.mealService = new MealServiceImpl(new MealRepoByList());
+        this.mealService = new MealServiceImpl(new MealRepoInMemory());
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        int caloriesDayLimit = 2000;
+        int caloriesDayLimit = Integer.MAX_VALUE;
         req.setAttribute("mealList", mealService.findAllWithExcesses(caloriesDayLimit));
         LOG.debug("redirected to meals.jsp");
         req.getRequestDispatcher("meals.jsp").forward(req, resp);
