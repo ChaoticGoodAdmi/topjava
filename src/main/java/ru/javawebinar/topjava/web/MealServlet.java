@@ -1,7 +1,5 @@
 package ru.javawebinar.topjava.web;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repo.MealRepoInMemory;
 import ru.javawebinar.topjava.service.MealService;
@@ -15,7 +13,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class MealServlet extends HttpServlet {
-    private final Logger LOG = LoggerFactory.getLogger(MealServlet.class);
     private MealService mealService;
     private int caloriesDayLimit = 2000;
 
@@ -29,12 +26,7 @@ public class MealServlet extends HttpServlet {
         switch (action != null ? action : "list") {
             case "update":
                 int id = getId(req);
-                Meal meal;
-                if (id == 0) {
-                    meal = getEmptyMeal();
-                } else {
-                    meal = mealService.findById(getId(req));
-                }
+                Meal meal = id == 0 ? getEmptyMeal() : mealService.findById(getId(req));
                 req.setAttribute("meal", meal);
                 req.getRequestDispatcher("edit.jsp").forward(req, resp);
                 break;
