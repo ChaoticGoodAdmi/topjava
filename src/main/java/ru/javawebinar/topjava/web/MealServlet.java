@@ -18,7 +18,7 @@ import java.time.temporal.ChronoUnit;
 public class MealServlet extends HttpServlet {
     private final Logger log = LoggerFactory.getLogger(MealServlet.class);
     private MealService mealService;
-    private final int CALORIES_DAY_LIMIT = 2000;
+    private final int caloriesDayLimit = 2000;
 
     public void init() {
         this.mealService = new MealServiceImpl(new MealRepoInMemory());
@@ -42,7 +42,7 @@ public class MealServlet extends HttpServlet {
                 break;
             case "list":
             default:
-                req.setAttribute("mealList", mealService.findAllWithExcesses(CALORIES_DAY_LIMIT));
+                req.setAttribute("mealList", mealService.findAllWithExcesses(caloriesDayLimit));
                 req.getRequestDispatcher("meals.jsp").forward(req, resp);
                 log.debug("forward to meals.jsp");
                 break;

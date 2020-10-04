@@ -46,9 +46,9 @@ public class MealRepoInMemory implements Repository<Meal> {
     @Override
     public Meal update(Meal meal) {
         int mealId = meal.getId();
-        Meal updatedMeal = storage.replace(mealId, meal);
+        storage.replace(mealId, meal);
         log.debug("Meal #{} has been UPDATED in Repository", mealId);
-        return updatedMeal;
+        return meal;
     }
 
     @Override
