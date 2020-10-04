@@ -4,10 +4,9 @@
     <title>Edit meal</title>
 </head>
 <body>
-<h2>Edit meal</h2>
+<jsp:useBean id="meal" scope="request" type="ru.javawebinar.topjava.model.Meal"/>
+<h2>${meal.id == 0 ? 'Create new meal' : 'Edit meal'}</h2>
 <form method="post" action="meals">
-    <jsp:useBean id="meal" scope="request" type="ru.javawebinar.topjava.model.Meal"/>
-    <input type="hidden" name="pageName" value="update"/>
     <input type="hidden" name="id" value="${meal.id}">
     <table>
         <tr>

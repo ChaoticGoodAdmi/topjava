@@ -11,7 +11,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 public class MealServiceImpl implements MealService {
-    private final Logger LOG = LoggerFactory.getLogger(MealServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(MealServiceImpl.class);
     private final Repository<Meal> repo;
 
     public MealServiceImpl(Repository<Meal> repo) {
@@ -19,9 +19,9 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public void saveToRepo(Meal meal) {
-        repo.save(meal);
-        LOG.debug(meal.toString() + " saved");
+    public void create(Meal meal) {
+        Meal newMeal = repo.create(meal);
+        log.debug("Meal #{} has been created by Service", newMeal.getId());
     }
 
     @Override
@@ -30,13 +30,15 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public void updateInRepo(Meal meal) {
-        repo.update(meal);
+    public void update(Meal meal) {
+        Meal editedMeal = repo.update(meal);
+        log.debug("Meal #{} has been updated by Service", editedMeal.getId());
     }
 
     @Override
-    public void deleteFromRepo(int id) {
+    public void delete(int id) {
         repo.delete(id);
+        log.debug("Meal #{} has been deleted by Service", id);
     }
 
     @Override

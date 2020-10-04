@@ -24,7 +24,7 @@
     <jsp:useBean id="mealList" scope="request" type="java.util.List"/>
     <c:forEach var="meal" items="${mealList}">
         <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
-        <tr id="<c:out value="${meal.excess ? 'excess' : 'not-excess'}" />">
+        <tr id="${meal.excess ? 'excess' : 'not-excess'}">
             <td><javatime:format value="${meal.dateTime}" style="SS"/></td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
@@ -35,7 +35,5 @@
     <tr>
     </tr>
 </table>
-<br>
-<a href="meals?action=limit">Change calories limit</a>
 </body>
 </html>

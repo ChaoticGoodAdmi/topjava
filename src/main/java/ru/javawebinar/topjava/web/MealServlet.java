@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.web;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repo.MealRepoInMemory;
 import ru.javawebinar.topjava.service.MealService;
@@ -13,8 +15,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class MealServlet extends HttpServlet {
+    private final Logger log = LoggerFactory.getLogger(MealServlet.class);
     private MealService mealService;
-    private int caloriesDayLimit = 2000;
 
     public void init() {
         this.mealService = new MealServiceImpl(new MealRepoInMemory());
@@ -23,25 +25,25 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
+        int caloriesDayLimit = 2000;
         switch (action != null ? action : "list") {
             case "update":
                 int id = getId(req);
                 Meal meal = id == 0 ? getEmptyMeal() : mealService.findById(getId(req));
                 req.setAttribute("meal", meal);
                 req.getRequestDispatcher("edit.jsp").forward(req, resp);
+                log.debug("forward to edit.jsp");
                 break;
             case "delete":
-                mealService.deleteFromRepo(getId(req));
+                mealService.delete(getId(req));
                 resp.sendRedirect("meals");
-                break;
-            case "limit":
-                req.setAttribute("limit", caloriesDayLimit);
-                req.getRequestDispatcher("limit.jsp").forward(req, resp);
+                log.debug("redirect to meals.jsp");
                 break;
             case "list":
             default:
                 req.setAttribute("mealList", mealService.findAllWithExcesses(caloriesDayLimit));
                 req.getRequestDispatcher("meals.jsp").forward(req, resp);
+                log.debug("forward to meals.jsp");
                 break;
         }
     }
@@ -49,21 +51,17 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         req.setCharacterEncoding("UTF-8");
-        String action = req.getParameter("pageName");
-        if ("limit".equals(action)) {
-            caloriesDayLimit = Integer.parseInt(req.getParameter("limit"));
-        } else if ("update".equals(action)) {
-            int id = getId(req);
-            LocalDateTime dateTime = LocalDateTime.parse(req.getParameter("dateTime"));
-            String description = req.getParameter("description");
-            int calories = Integer.parseInt(req.getParameter("calories"));
-            if (id == 0) {
-                mealService.saveToRepo(new Meal(dateTime, description, calories));
-            } else {
-                mealService.updateInRepo(new Meal(id, dateTime, description, calories));
-            }
+        int id = getId(req);
+        LocalDateTime dateTime = LocalDateTime.parse(req.getParameter("dateTime"));
+        String description = req.getParameter("description");
+        int calories = Integer.parseInt(req.getParameter("calories"));
+        if (id == 0) {
+            mealService.create(new Meal(dateTime, description, calories));
+        } else {
+            mealService.update(new Meal(id, dateTime, description, calories));
         }
         resp.sendRedirect("meals");
+        log.debug("redirect to meals.jsp");
     }
 
     private int getId(HttpServletRequest req) {
@@ -72,6 +70,13 @@ public class MealServlet extends HttpServlet {
     }
 
     private Meal getEmptyMeal() {
-        return new Meal(0, LocalDateTime.now(), "", 0);
+        return new Meal(0,
+                LocalDateTime.of(
+                        LocalDateTime.now().getYear(),
+                        LocalDateTime.now().getMonth(),
+                        LocalDateTime.now().getDayOfMonth(),
+                        LocalDateTime.now().getHour(),
+                        LocalDateTime.now().getMinute()
+                ), "", 0);
     }
 }

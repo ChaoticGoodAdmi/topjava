@@ -6,13 +6,13 @@ import ru.javawebinar.topjava.model.MealTo;
 import java.util.List;
 
 public interface MealService {
-    void saveToRepo(Meal meal);
+    void create(Meal meal);
 
     Meal findById(int id);
 
-    void updateInRepo(Meal meal);
+    void update(Meal meal);
 
-    void deleteFromRepo(int id);
+    void delete(int id);
 
     List<Meal> findAll();
 
