@@ -8,6 +8,7 @@ import ru.javawebinar.topjava.repo.Repository;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
 
 public class MealServiceImpl implements MealService {
@@ -46,6 +47,7 @@ public class MealServiceImpl implements MealService {
     @Override
     public List<Meal> findAll() {
         List<Meal> allMeals = repo.getAll();
+        allMeals.sort(Comparator.comparing(Meal::getDateTime).reversed());
         log.debug("Service RETRIEVED this amount of items {}", allMeals.size());
         return allMeals;
     }

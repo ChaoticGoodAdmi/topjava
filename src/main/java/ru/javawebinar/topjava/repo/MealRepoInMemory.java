@@ -7,7 +7,6 @@ import ru.javawebinar.topjava.model.Meal;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -61,7 +60,6 @@ public class MealRepoInMemory implements Repository<Meal> {
     @Override
     public List<Meal> getAll() {
         ArrayList<Meal> meals = new ArrayList<>(storage.values());
-        meals.sort(Comparator.comparing(Meal::getDateTime).reversed());
         log.debug("Repository RETRIEVED this amount of items: {}", meals.size());
         return meals;
     }
