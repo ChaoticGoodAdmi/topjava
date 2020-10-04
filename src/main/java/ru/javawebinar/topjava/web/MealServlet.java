@@ -13,10 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class MealServlet extends HttpServlet {
     private final Logger log = LoggerFactory.getLogger(MealServlet.class);
     private MealService mealService;
+    private final int CALORIES_DAY_LIMIT = 2000;
 
     public void init() {
         this.mealService = new MealServiceImpl(new MealRepoInMemory());
@@ -25,11 +27,10 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
-        int caloriesDayLimit = 2000;
         switch (action != null ? action : "list") {
             case "update":
                 int id = getId(req);
-                Meal meal = id == 0 ? getEmptyMeal() : mealService.findById(getId(req));
+                Meal meal = id == 0 ? getEmptyMeal() : mealService.findById(id);
                 req.setAttribute("meal", meal);
                 req.getRequestDispatcher("edit.jsp").forward(req, resp);
                 log.debug("forward to edit.jsp");
@@ -41,7 +42,7 @@ public class MealServlet extends HttpServlet {
                 break;
             case "list":
             default:
-                req.setAttribute("mealList", mealService.findAllWithExcesses(caloriesDayLimit));
+                req.setAttribute("mealList", mealService.findAllWithExcesses(CALORIES_DAY_LIMIT));
                 req.getRequestDispatcher("meals.jsp").forward(req, resp);
                 log.debug("forward to meals.jsp");
                 break;
@@ -71,12 +72,6 @@ public class MealServlet extends HttpServlet {
 
     private Meal getEmptyMeal() {
         return new Meal(0,
-                LocalDateTime.of(
-                        LocalDateTime.now().getYear(),
-                        LocalDateTime.now().getMonth(),
-                        LocalDateTime.now().getDayOfMonth(),
-                        LocalDateTime.now().getHour(),
-                        LocalDateTime.now().getMinute()
-                ), "", 0);
+                LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 0);
     }
 }

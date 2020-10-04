@@ -7,6 +7,7 @@ import ru.javawebinar.topjava.model.Meal;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,10 +22,10 @@ public class MealRepoInMemory implements Repository<Meal> {
         create(new Meal(LocalDateTime.of(2020, Month.OCTOBER, 1, 7, 30, 0), "Breakfast", 300));
         create(new Meal(LocalDateTime.of(2020, Month.OCTOBER, 1, 12, 0, 0), "Lunch", 400));
         create(new Meal(LocalDateTime.of(2020, Month.OCTOBER, 1, 18, 40, 0), "Dinner", 600));
-        create(new Meal(LocalDateTime.of(2020, Month.OCTOBER, 2, 12, 0, 0), "Breakfast", 350));
+        create(new Meal(LocalDateTime.of(2020, Month.OCTOBER, 2, 7, 0, 0), "Breakfast", 350));
         create(new Meal(LocalDateTime.of(2020, Month.OCTOBER, 2, 12, 0, 0), "Lunch", 450));
-        create(new Meal(LocalDateTime.of(2020, Month.OCTOBER, 2, 12, 0, 0), "Dinner", 500));
-        create(new Meal(LocalDateTime.of(2020, Month.OCTOBER, 2, 12, 0, 0), "Supper", 800));
+        create(new Meal(LocalDateTime.of(2020, Month.OCTOBER, 2, 16, 0, 0), "Dinner", 500));
+        create(new Meal(LocalDateTime.of(2020, Month.OCTOBER, 2, 20, 0, 0), "Supper", 800));
     }
 
     @Override
@@ -60,6 +61,7 @@ public class MealRepoInMemory implements Repository<Meal> {
     @Override
     public List<Meal> getAll() {
         ArrayList<Meal> meals = new ArrayList<>(storage.values());
+        meals.sort(Comparator.comparing(Meal::getDateTime).reversed());
         log.debug("Repository RETRIEVED this amount of items: {}", meals.size());
         return meals;
     }
