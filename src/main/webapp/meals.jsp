@@ -1,6 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://sargue.net/jsptags/time" prefix="javatime" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <html lang="ru">
 <head>
