@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://sargue.net/jsptags/time" prefix="javatime" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <html lang="ru">
 <head>
@@ -24,8 +25,9 @@
     <jsp:useBean id="mealList" scope="request" type="java.util.List"/>
     <c:forEach var="meal" items="${mealList}">
         <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
+        <javatime:format value="${meal.dateTime}" pattern="yyyy-MM-dd hh:mm" var="parsedDateTime"/>
         <tr id="${meal.excess ? 'excess' : 'not-excess'}">
-            <td><javatime:format value="${meal.dateTime}" style="SS"/></td>
+            <td>${parsedDateTime}</td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
             <td><a href="meals?id=${meal.id}&action=update">Update</a></td>
