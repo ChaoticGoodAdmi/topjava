@@ -32,34 +32,36 @@ public class MealRepoInMemory implements Repository<Meal> {
         int id = getNewId();
         meal.setId(id);
         storage.put(id, meal);
-        log.debug("Meal #{} has been put in repository", meal.getId());
+        log.debug("Meal #{} has been CREATED in Repository", meal.getId());
         return meal;
     }
 
     @Override
     public Meal get(int id) {
-        return storage.get(id);
+        Meal meal = storage.get(id);
+        log.debug("Meal #{} has been RETRIEVED from Repository", meal.getId());
+        return meal;
     }
 
     @Override
     public Meal update(Meal meal) {
         int mealId = meal.getId();
-        if (storage.containsKey(mealId)) {
-            storage.put(mealId, meal);
-            log.debug("Meal #{} has been updated in repository", mealId);
-        }
-        return meal;
+        Meal updatedMeal = storage.replace(mealId, meal);
+        log.debug("Meal #{} has been UPDATED in Repository", mealId);
+        return updatedMeal;
     }
 
     @Override
     public void delete(int id) {
         storage.remove(id);
-        log.debug("Meal #{} has been deleted from repository", id);
+        log.debug("Meal #{} has been DELETED from Repository", id);
     }
 
     @Override
     public List<Meal> getAll() {
-        return new ArrayList<>(storage.values());
+        ArrayList<Meal> meals = new ArrayList<>(storage.values());
+        log.debug("Repository RETRIEVED this amount of items: {}", meals.size());
+        return meals;
     }
 
     private int getNewId() {
