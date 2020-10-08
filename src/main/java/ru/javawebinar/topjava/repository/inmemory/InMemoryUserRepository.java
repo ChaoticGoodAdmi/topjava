@@ -38,6 +38,7 @@ public class InMemoryUserRepository implements UserRepository {
             log.info("save {}", user);
             return user;
         }
+        log.info("update {}", user);
         return repository.computeIfPresent(user.getId(), (id, oldUser) -> user);
     }
 
