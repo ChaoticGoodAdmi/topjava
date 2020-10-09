@@ -18,7 +18,7 @@ public class InMemoryUserRepository implements UserRepository {
     private final Map<Integer, User> repository = new ConcurrentHashMap<>();
     private final AtomicInteger counter = new AtomicInteger(0);
 
-    public InMemoryUserRepository() {
+    private InMemoryUserRepository() {
         save(new User(null, "admin", "admin@email.com", "123", 2000, true, new HashSet<>(Arrays.asList(Role.ADMIN, Role.USER))));
         save(new User(null, "user1", "user1@email.com", "123", 2000, true, new HashSet<>(Collections.singleton(Role.USER))));
         save(new User(null, "user1", "user2@email.com", "123", 2000, true, new HashSet<>(Collections.singleton(Role.USER))));
