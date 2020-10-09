@@ -7,8 +7,8 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
 
-import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -20,55 +20,44 @@ public class InMemoryMealRepository implements MealRepository {
     private final Map<Integer, Meal> repository = new ConcurrentHashMap<>();
     private final AtomicInteger counter = new AtomicInteger(0);
 
-    {
-        MealsUtil.meals.forEach(meal -> save(meal, meal.getUserId()));
+    private InMemoryMealRepository() {
+        MealsUtil.meals.forEach(meal -> {
+            meal.setUserId(1);
+            save(meal);
+        });
     }
 
     @Override
-    public Meal save(Meal meal, int userId) {
-        if (checkAuthorisation(meal, userId)) {
-            return null;
-        } else if (meal.isNew()) {
+    public Meal save(Meal meal) {
+        if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
             repository.put(meal.getId(), meal);
-            log.info("save {}", meal);
+            log.debug("save {}", meal);
             return meal;
         }
-        log.info("update {}", meal);
+        log.debug("update {}", meal);
         return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
     }
 
     @Override
-    public boolean delete(int id, int userId) {
+    public boolean delete(int id) {
         log.info("delete {}", id);
-        return get(id, userId) != null && repository.remove(id) != null;
+        return repository.remove(id) != null;
     }
 
     @Override
-    public Meal get(int id, int userId) {
-        Meal meal = repository.get(id);
-        if (checkAuthorisation(meal, userId)) {
-            return null;
-        }
+    public Meal get(int id) {
         log.info("get {}", id);
-        return meal;
+        return repository.get(id);
     }
 
     @Override
-    public Collection<Meal> getAll(int userId) {
+    public List<Meal> getAll(int userId) {
         log.info("getAll from user {}", userId);
         return repository.values().stream()
                 .filter(user -> user.getUserId() == userId)
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
-    }
-
-    private boolean checkAuthorisation(Meal meal, int userId) {
-        if (meal != null && meal.getUserId() != userId) {
-            log.debug("Not authorised operation");
-            return true;
-        }
-        return false;
     }
 }
 
