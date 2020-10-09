@@ -7,7 +7,9 @@ import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -19,9 +21,9 @@ public class InMemoryUserRepository implements UserRepository {
     private final AtomicInteger counter = new AtomicInteger(0);
 
     private InMemoryUserRepository() {
-        save(new User(null, "admin", "admin@email.com", "123", 2000, true, new HashSet<>(Arrays.asList(Role.ADMIN, Role.USER))));
-        save(new User(null, "user1", "user1@email.com", "123", 2000, true, new HashSet<>(Collections.singleton(Role.USER))));
-        save(new User(null, "user1", "user2@email.com", "123", 2000, true, new HashSet<>(Collections.singleton(Role.USER))));
+        save(new User(null, "admin", "admin@email.com", "123", Role.ADMIN, Role.USER));
+        save(new User(null, "user1", "user1@email.com", "123", Role.USER));
+        save(new User(null, "user1", "user2@email.com", "123", Role.USER));
     }
 
     @Override

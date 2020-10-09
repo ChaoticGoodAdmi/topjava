@@ -35,7 +35,7 @@
         <label>Start time (included):
             <input type="time" name="startTime">
         </label>
-        <label>Start time (not included):
+        <label>End time (not included):
             <input type="time" name="endTime">
         </label>
         <br>

@@ -33,12 +33,15 @@ public class MealRestController {
     }
 
     public List<MealTo> getAll(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
-        startDate = replaceWithBoundaryValue(startDate, LocalDate.MIN);
-        endDate = replaceWithBoundaryValue(endDate, LocalDate.MAX);
-        startTime = replaceWithBoundaryValue(startTime, LocalTime.MIN);
-        endTime = replaceWithBoundaryValue(endTime, LocalTime.MAX);
         log.info("getAll for user {} from {} {} till {} {}", authUserId(), startDate, startTime, endDate, endTime);
-        return MealsUtil.getTos(service.getAllFiltered(authUserId(), startDate, endDate, startTime, endTime), authUserCaloriesPerDay());
+        return MealsUtil.getFilteredTos(
+                service.getAllFiltered(
+                        authUserId(),
+                        startDate == null ? LocalDate.MIN : startDate,
+                        endDate == null ? LocalDate.MAX : endDate),
+                authUserCaloriesPerDay(),
+                startTime == null ? LocalTime.MIN : startTime,
+                endTime == null ? LocalTime.MAX : endTime);
     }
 
     public Meal get(int id) {
@@ -46,11 +49,11 @@ public class MealRestController {
         return service.get(id, authUserId());
     }
 
-    public Meal create(Meal meal) {
+    public void create(Meal meal) {
         log.info("create {}", meal);
         meal.setUserId(authUserId());
         checkNew(meal);
-        return service.create(meal, authUserId());
+        service.create(meal, authUserId());
     }
 
     public void delete(int id) {
@@ -58,23 +61,10 @@ public class MealRestController {
         service.delete(id, authUserId());
     }
 
-    public void update(Meal meal) {
+    public void update(Meal meal, int id) {
         log.info("update {}", meal);
         meal.setUserId(authUserId());
-        service.update(meal, authUserId());
+        service.update(meal, id, authUserId());
     }
 
-    private LocalTime replaceWithBoundaryValue(LocalTime lt, LocalTime min) {
-        if (lt == null) {
-            lt = min;
-        }
-        return lt;
-    }
-
-    private LocalDate replaceWithBoundaryValue(LocalDate ld, LocalDate min) {
-        if (ld == null) {
-            ld = min;
-        }
-        return ld;
-    }
 }
