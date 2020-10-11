@@ -2,7 +2,6 @@ package ru.javawebinar.topjava.util;
 
 
 import ru.javawebinar.topjava.model.AbstractBaseEntity;
-import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 public class ValidationUtil {
@@ -40,12 +39,5 @@ public class ValidationUtil {
         } else if (entity.getId() != id) {
             throw new IllegalArgumentException(entity + " must be with id=" + id);
         }
-    }
-
-    public static Meal checkAuthorisation(Meal meal, int userId) {
-        if (meal != null && meal.getUserId() != userId) {
-            throw new NotFoundException("Authorisation failed");
-        }
-        return meal;
     }
 }

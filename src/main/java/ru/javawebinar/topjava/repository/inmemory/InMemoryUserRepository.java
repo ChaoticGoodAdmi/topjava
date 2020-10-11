@@ -22,7 +22,7 @@ public class InMemoryUserRepository implements UserRepository {
 
     private InMemoryUserRepository() {
         save(new User(null, "admin", "admin@email.com", "123", Role.ADMIN, Role.USER));
-        save(new User(null, "user1", "user1@email.com", "123", Role.USER));
+        save(new User(null, "user1", "user1@email.com", "111", Role.USER));
         save(new User(null, "user1", "user2@email.com", "123", Role.USER));
     }
 
@@ -54,7 +54,7 @@ public class InMemoryUserRepository implements UserRepository {
     public List<User> getAll() {
         log.info("getAll");
         return repository.values().stream()
-                .sorted(Comparator.comparing(User::getEmail))
+                .sorted(Comparator.comparing(User::getName).thenComparing(User::getEmail))
                 .collect(Collectors.toList());
     }
 

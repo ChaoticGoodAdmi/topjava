@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 import static ru.javawebinar.topjava.web.SecurityUtil.authUserCaloriesPerDay;
 import static ru.javawebinar.topjava.web.SecurityUtil.authUserId;
@@ -51,7 +52,6 @@ public class MealRestController {
 
     public void create(Meal meal) {
         log.info("create {}", meal);
-        meal.setUserId(authUserId());
         checkNew(meal);
         service.create(meal, authUserId());
     }
@@ -63,8 +63,7 @@ public class MealRestController {
 
     public void update(Meal meal, int id) {
         log.info("update {}", meal);
-        meal.setUserId(authUserId());
-        service.update(meal, id, authUserId());
+        assureIdConsistent(meal, id);
+        service.update(meal, authUserId());
     }
-
 }

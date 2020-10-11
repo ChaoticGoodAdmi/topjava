@@ -8,7 +8,7 @@ public class DateTimeUtil {
 
     public static <T extends Comparable<T>> boolean isBetween(T time, T startTime, T endTime, boolean isOpenSecondBoundary) {
         return time.compareTo(startTime) >= 0 &&
-                (time.compareTo(endTime) <= 0 && isOpenSecondBoundary || time.compareTo(endTime) < 0 && !isOpenSecondBoundary);
+                (!isOpenSecondBoundary && time.compareTo(endTime) < 0 || isOpenSecondBoundary && time.compareTo(endTime) <= 0);
     }
 
     public static String toString(LocalDateTime ldt) {
