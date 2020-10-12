@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,11 +34,11 @@ public class MealService {
     }
 
     public List<Meal> getAll(int userId) {
-        return repository.getAll(userId);
+        return repository.getAll(meal -> true, userId);
     }
 
     public List<Meal> getAllFiltered(int userId, LocalDate startDate, LocalDate endDate) {
-        return repository.getAllFilteredByDate(startDate, endDate, userId);
+        return repository.getAll(meal -> DateTimeUtil.isBetween(meal.getDate(), startDate, endDate, true), userId);
     }
 
     public void update(Meal meal, int userId) {
