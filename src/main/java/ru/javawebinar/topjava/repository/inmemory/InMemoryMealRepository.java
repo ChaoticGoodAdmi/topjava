@@ -34,7 +34,7 @@ public class InMemoryMealRepository implements MealRepository {
         Map<Integer, Meal> userMeals = repository.computeIfAbsent(userId, HashMap::new);
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
-        } else if (get(meal.getId(), userId) == null) {
+        } else if (userMeals.get(meal.getId()) == null) {
             return null;
         }
         userMeals.put(meal.getId(), meal);
@@ -44,7 +44,8 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public boolean delete(int id, int userId) {
         log.info("delete {}", id);
-        return repository.get(userId).remove(id) != null;
+        Map<Integer, Meal> userMeals = repository.get(userId);
+        return userMeals != null && userMeals.remove(id) != null;
     }
 
     @Override
@@ -57,16 +58,15 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public List<Meal> getAll(int userId) {
         log.info("getAll from user {}", userId);
-        return repository.getOrDefault(userId, new HashMap<>()).values().stream()
-                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
-                .collect(Collectors.toList());
+        return getAllFilteredByDate(LocalDate.MIN, LocalDate.MAX, userId);
     }
 
     @Override
     public List<Meal> getAllFilteredByDate(LocalDate startDate, LocalDate endDate, int userId) {
         log.info("getAll for user {} from {} till {}", userId, startDate, endDate);
-        return getAll(userId).stream()
+        return repository.getOrDefault(userId, new HashMap<>()).values().stream()
                 .filter(meal -> DateTimeUtil.isBetween(meal.getDate(), startDate, endDate, true))
+                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());
     }
 }
