@@ -26,17 +26,17 @@
     <form method="get" action="meals">
         <input type="hidden" name="action" value="filter">
         <label>Start date (included):
-            <input type="date" name="startDate">
+            <input type="date" name="startDate" value="${param.startDate}">
         </label>
         <label>End date (included):
-            <input type="date" name="endDate">
+            <input type="date" name="endDate" value="${param.endDate}">
         </label>
         <br>
         <label>Start time (included):
-            <input type="time" name="startTime">
+            <input type="time" name="startTime" value="${param.startTime}">
         </label>
         <label>End time (not included):
-            <input type="time" name="endTime">
+            <input type="time" name="endTime" value="${param.endTime}">
         </label>
         <br>
         <input type="submit" name="submit" value="Filter">
