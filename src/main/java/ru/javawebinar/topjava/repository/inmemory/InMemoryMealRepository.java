@@ -7,6 +7,7 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +26,8 @@ public class InMemoryMealRepository implements MealRepository {
 
     private InMemoryMealRepository() {
         MealsUtil.meals.forEach(meal -> save(meal, 1));
+        save(new Meal(LocalDateTime.of(2020, 10, 13, 7, 0), "User2 Breakfast", 500), 2);
+        save(new Meal(LocalDateTime.of(2020, 10, 13, 12, 0), "User2 Lunch", 1000), 2);
     }
 
     @Override
