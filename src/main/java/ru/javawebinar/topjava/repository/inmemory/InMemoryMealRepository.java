@@ -61,7 +61,7 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public List<Meal> getAll(LocalDate startDate, LocalDate endDate, int userId) {
         log.info("getAll from user {}", userId);
-        return repository.getOrDefault(userId, new HashMap<>()).values().stream()
+        return repository.get(userId).values().stream()
                 .filter(meal -> DateTimeUtil.isBetween(meal.getDate(),
                         startDate == null ? LocalDate.MIN : startDate,
                         endDate == null ? LocalDate.MAX : endDate,
