@@ -101,10 +101,10 @@ public class MealServlet extends HttpServlet {
     }
 
     private LocalDate parseLocalDate(String textDate) {
-        return !"".equals(textDate) ? LocalDate.parse(textDate) : null;
+        return textDate != null && !"".equals(textDate) ? LocalDate.parse(textDate) : null;
     }
 
     private LocalTime parseLocalTime(String textTime) {
-        return !"".equals(textTime) ? LocalTime.parse(textTime) : null;
+        return textTime!= null && !"".equals(textTime) ? LocalTime.parse(textTime) : null;
     }
 }
