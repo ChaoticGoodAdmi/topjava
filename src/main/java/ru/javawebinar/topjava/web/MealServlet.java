@@ -2,8 +2,6 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.web.meal.MealRestController;
@@ -22,7 +20,7 @@ import java.util.Objects;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
-    private ApplicationContext appCtx;
+    private ClassPathXmlApplicationContext appCtx;
     private MealRestController controller;
 
     @Override
@@ -34,8 +32,7 @@ public class MealServlet extends HttpServlet {
 
     @Override
     public void destroy() {
-        super.destroy();
-        ((ConfigurableApplicationContext) appCtx).close();
+        appCtx.close();
     }
 
     @Override
@@ -47,7 +44,8 @@ public class MealServlet extends HttpServlet {
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")));
 
-        if (request.getParameter("id").equals("")) {
+        final String id = request.getParameter("id");
+        if (id == null || id.equals("")) {
             log.info("create {}", meal);
             controller.create(meal);
         } else {
