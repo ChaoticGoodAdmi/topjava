@@ -18,7 +18,7 @@ public class SpringMain {
             adminUserController.create(new User(null, "userName", "email@mail.ru", "password", Role.ADMIN));
             MealRestController controller = appCtx.getBean(MealRestController.class);
             SecurityUtil.setAuthUserId(1);
-            System.out.println(controller.getAll());
+            System.out.println(controller.getAllFiltered());
         }
     }
 }
