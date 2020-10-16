@@ -11,10 +11,10 @@ import java.util.stream.IntStream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MealTestData {
-    private static int INITIAL_ID = 100000;
-    public static int USER_ID = INITIAL_ID;
-    public static int ADMIN_ID = INITIAL_ID + 1;
-    public static int MEAL_ID = INITIAL_ID + 2;
+    private static final int INITIAL_ID = 100000;
+    public static final int USER_ID = INITIAL_ID;
+    public static final int ADMIN_ID = INITIAL_ID + 1;
+    public static final int MEAL_ID = INITIAL_ID + 2;
     public static final Meal MEAL_1 = new Meal(MEAL_ID, LocalDateTime.of(2020, 10, 15, 10, 0),
             "Breakfast", 500);
     private static final Meal MEAL_2 = new Meal(MEAL_ID + 1, LocalDateTime.of(2020, 10, 15, 13, 0),
@@ -35,7 +35,7 @@ public class MealTestData {
             "Admin Dinner", 1000);
 
     public static final List<Meal> SORTED_USER_MEALS = Arrays.asList(MEAL_7, MEAL_6, MEAL_5, MEAL_4, MEAL_3, MEAL_2, MEAL_1);
-    public static LocalDate TEST_DATE = LocalDate.of(2020, 10, 16);
+    public static final LocalDate TEST_DATE = LocalDate.of(2020, 10, 16);
     public static final List<Meal> FILTERED_ADMIN_MEALS = Arrays.asList(MEAL_9, MEAL_8);
 
     public static Meal getNew() {

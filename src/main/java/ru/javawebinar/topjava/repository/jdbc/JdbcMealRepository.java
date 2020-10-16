@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.repository.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
+@Primary
 public class JdbcMealRepository implements MealRepository {
     private final JdbcTemplate jdbcTemplate;
 
@@ -57,7 +59,7 @@ public class JdbcMealRepository implements MealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        return jdbcTemplate.update("DELETE FROM meals WHERE id= ?", id) != 0;
+        return jdbcTemplate.update("DELETE FROM meals WHERE id= ? AND user_id = ?", id, userId) != 0;
     }
 
     @Override
