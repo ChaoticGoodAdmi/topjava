@@ -48,11 +48,7 @@ public class MealTestData {
         return new Meal(100002, LocalDateTime.of(2020, 1, 1, 0, 0), "UpdatedData", 10);
     }
 
-    public static void assertMatch(Meal expected, Meal actual) {
-        assertThat(expected).usingRecursiveComparison().isEqualTo(actual);
-    }
-
-    public static void assertMatch(List<Meal> expected, List<Meal> actual) {
+    public static void assertMatch(Object expected, Object actual) {
         assertThat(expected).usingRecursiveComparison().isEqualTo(actual);
     }
 }
