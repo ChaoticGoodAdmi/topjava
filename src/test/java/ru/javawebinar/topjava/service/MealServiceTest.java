@@ -19,8 +19,7 @@ import static ru.javawebinar.topjava.MealTestData.*;
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
-}
-)
+})
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDb.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
@@ -34,34 +33,34 @@ public class MealServiceTest {
 
     @Test
     public void get() {
-        final Meal meal = service.get(MEAL_ID, USER_ID);
-        assertMatch(MEAL_1, meal);
+        final Meal meal = service.get(USER_MEAL_ID, USER_ID);
+        assertMatch(USER_MEAL_1, meal);
     }
 
     @Test
     public void getNonExistent() {
-        assertThrows(NotFoundException.class, () -> service.get(0, USER_ID));
+        assertThrows(NotFoundException.class, () -> service.get(MEAL_ID_NON_EXISTENT, USER_ID));
     }
 
     @Test
     public void getNotOwned() {
-        assertThrows(NotFoundException.class, () -> service.get(MEAL_ID, ADMIN_ID));
+        assertThrows(NotFoundException.class, () -> service.get(USER_MEAL_ID, ADMIN_ID));
     }
 
     @Test
     public void delete() {
-        service.delete(MEAL_ID, USER_ID);
-        assertThrows(NotFoundException.class, () -> service.get(MEAL_ID, USER_ID));
+        service.delete(USER_MEAL_ID, USER_ID);
+        assertThrows(NotFoundException.class, () -> service.get(USER_MEAL_ID, USER_ID));
     }
 
     @Test
     public void deleteNonExistent() {
-        assertThrows(NotFoundException.class, () -> service.delete(0, USER_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(MEAL_ID_NON_EXISTENT, USER_ID));
     }
 
     @Test
     public void deleteNotOwned() {
-        assertThrows(NotFoundException.class, () -> service.delete(USER_ID, ADMIN_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(USER_MEAL_ID, ADMIN_ID));
     }
 
     @Test
@@ -91,7 +90,7 @@ public class MealServiceTest {
     @Test
     public void updateNonExistent() {
         Meal meal = getNew();
-        meal.setId(1);
+        meal.setId(MEAL_ID_NON_EXISTENT);
         assertThrows(NotFoundException.class, () -> service.update(meal, USER_ID));
     }
 
