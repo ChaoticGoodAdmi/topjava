@@ -32,14 +32,14 @@ public class MealTestData {
             "Lunch", 500);
     public static final Meal USER_MEAL_7 = new Meal(USER_MEAL_ID + 6, LocalDateTime.of(2020, 10, 16, 20, 0),
             "Dinner", 410);
-    public static final Meal ADMIN_MEAL_8 = new Meal(ADMIN_MEAL_ID, LocalDateTime.of(2020, 10, 16, 10, 0),
+    public static final Meal ADMIN_MEAL_1 = new Meal(ADMIN_MEAL_ID, LocalDateTime.of(2020, 10, 16, 10, 0),
             "Admin Breakfast", 1000);
-    public static final Meal ADMIN_MEAL_9 = new Meal(ADMIN_MEAL_ID + 1, LocalDateTime.of(2020, 10, 16, 18, 0),
+    public static final Meal ADMIN_MEAL_2 = new Meal(ADMIN_MEAL_ID + 1, LocalDateTime.of(2020, 10, 16, 18, 0),
             "Admin Dinner", 1000);
 
     public static final List<Meal> SORTED_USER_MEALS = Arrays.asList(USER_MEAL_7, USER_MEAL_6, USER_MEAL_5, USER_MEAL_4, USER_MEAL_3, USER_MEAL_2, USER_MEAL_1);
     public static final LocalDate TEST_DATE = LocalDate.of(2020, 10, 16);
-    public static final List<Meal> FILTERED_ADMIN_MEALS = Arrays.asList(ADMIN_MEAL_9, ADMIN_MEAL_8);
+    public static final List<Meal> FILTERED_ADMIN_MEALS = Arrays.asList(ADMIN_MEAL_2, ADMIN_MEAL_1);
 
     public static Meal getNew() {
         return new Meal(null, LocalDateTime.of(2020, 1, 1, 0, 0), "TestData", 1000);
