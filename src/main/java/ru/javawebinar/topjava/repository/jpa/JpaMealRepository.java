@@ -9,7 +9,6 @@ import ru.javawebinar.topjava.repository.MealRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -17,11 +16,11 @@ import java.util.List;
 public class JpaMealRepository implements MealRepository {
 
     @PersistenceContext
-    EntityManager em;
+    private EntityManager em;
 
     @Override
     @Transactional
-    public Meal save (Meal meal, int userId) {
+    public Meal save(Meal meal, int userId) {
         meal.setUser(em.getReference(User.class, userId));
         if (meal.isNew()) {
             em.persist(meal);
@@ -34,7 +33,7 @@ public class JpaMealRepository implements MealRepository {
 
     @Override
     @Transactional
-    public boolean delete (int id, int userId) {
+    public boolean delete(int id, int userId) {
         return em.createNamedQuery(Meal.DELETE)
                 .setParameter("id", id)
                 .setParameter("userId", userId)
@@ -42,20 +41,20 @@ public class JpaMealRepository implements MealRepository {
     }
 
     @Override
-    public Meal get (int id, int userId) {
+    public Meal get(int id, int userId) {
         Meal meal = em.find(Meal.class, id);
         return meal == null || meal.getUser().getId() != userId ? null : meal;
     }
 
     @Override
-    public List<Meal> getAll (int userId) {
-        return em.createNamedQuery(Meal.All_SORTED, Meal.class)
+    public List<Meal> getAll(int userId) {
+        return em.createNamedQuery(Meal.ALL_SORTED, Meal.class)
                 .setParameter("userId", userId)
                 .getResultList();
     }
 
     @Override
-    public List<Meal> getBetweenHalfOpen (LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
+    public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
         return em.createNamedQuery(Meal.GET_FILTERED, Meal.class)
                 .setParameter("userId", userId)
                 .setParameter("startDate", startDateTime)
