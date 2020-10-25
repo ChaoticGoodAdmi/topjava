@@ -40,15 +40,6 @@ public class MealServiceTest {
     @Autowired
     private MealService service;
 
-    @AfterClass
-    public static void printTestsDurations() {
-        log.info("================================\n" +
-                "TIME SUMMARY: \n" +
-                "================================" +
-                summary +
-                "\n================================\n");
-    }
-
     @Rule
     public Stopwatch stopwatch = new Stopwatch() {
         @Override
@@ -60,6 +51,15 @@ public class MealServiceTest {
             summary.append(testSummary);
         }
     };
+
+    @AfterClass
+    public static void printTestsDurations() {
+        log.info("================================\n" +
+                "TIME SUMMARY: \n" +
+                "================================" +
+                summary +
+                "\n================================\n");
+    }
 
     @Test
     public void delete() throws Exception {
