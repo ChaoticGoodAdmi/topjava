@@ -26,6 +26,7 @@ import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
 
+@SuppressWarnings("RedundantThrows")
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
@@ -41,10 +42,11 @@ public class MealServiceTest {
 
     @AfterClass
     public static void printTestsDurations() {
-        log.info("=================================\n" +
+        log.info("================================\n" +
                 "TIME SUMMARY: \n" +
-                summary.toString() +
-                "=================================\n");
+                "================================" +
+                summary +
+                "\n================================\n");
     }
 
     @Rule
@@ -52,10 +54,10 @@ public class MealServiceTest {
         @Override
         protected void finished(long nanos, Description description) {
             String testName = description.getMethodName();
-            long time = TimeUnit.NANOSECONDS.toNanos(nanos);
-            log.info(String.format("Test name: %s\t\t\t\tCompletion time: %d ns",
-                    testName, time));
-            summary.append(testName).append(" - ").append(time).append(" ns").append("\n");
+            long time = TimeUnit.NANOSECONDS.toMillis(nanos);
+            String testSummary = String.format("\n%-25s %d ms", testName, time);
+            log.info(testSummary);
+            summary.append(testSummary);
         }
     };
 
