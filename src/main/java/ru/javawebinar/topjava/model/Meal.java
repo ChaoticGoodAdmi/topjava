@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.model;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -34,11 +35,11 @@ public class Meal extends AbstractBaseEntity {
 
     @Column(name = "description", nullable = false)
     @NotBlank
-    @Size(max = 255)
+    @Size(min = 2, max = 120)
     private String description;
 
     @Column(name = "calories", nullable = false)
-    @NotNull
+    @Range(min = 10, max = 5000)
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
