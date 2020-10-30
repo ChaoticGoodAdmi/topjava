@@ -18,7 +18,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 public abstract class AbstractMealServiceTest extends AbstractServiceTest {
 
     @Autowired
-    private MealService service;
+    protected MealService service;
 
     @Test
     public void delete() {
@@ -99,5 +99,15 @@ public abstract class AbstractMealServiceTest extends AbstractServiceTest {
     @Test
     public void getBetweenWithNullDates() {
         MEAL_MATCHER.assertMatch(service.getBetweenInclusive(null, null, USER_ID), meals);
+    }
+
+    @Test
+    public void getWithUser() {
+        assertThrows(UnsupportedOperationException.class, () -> service.getWithUser(MEAL1_ID, USER_ID));
+    }
+
+    @Test
+    public void getWithNotFoundUser() {
+        assertThrows(UnsupportedOperationException.class, () -> service.getWithUser(NOT_FOUND, USER_ID));
     }
 }
