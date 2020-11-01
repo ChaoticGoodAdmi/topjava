@@ -84,14 +84,4 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
         List<User> all = service.getAll();
         USER_MATCHER.assertMatch(all, admin, user);
     }
-
-    @Test
-    public void getWithMeals() {
-        assertThrows(UnsupportedOperationException.class, () -> service.getWithMeals(USER_ID));
-    }
-
-    @Test
-    public void getWithNotFoundMeals() {
-        assertThrows(UnsupportedOperationException.class, () -> service.getWithMeals(NOT_FOUND));
-    }
 }

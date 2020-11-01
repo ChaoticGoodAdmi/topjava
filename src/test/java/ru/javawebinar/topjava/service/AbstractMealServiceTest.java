@@ -100,14 +100,4 @@ public abstract class AbstractMealServiceTest extends AbstractServiceTest {
     public void getBetweenWithNullDates() {
         MEAL_MATCHER.assertMatch(service.getBetweenInclusive(null, null, USER_ID), meals);
     }
-
-    @Test
-    public void getWithUser() {
-        assertThrows(UnsupportedOperationException.class, () -> service.getWithUser(MEAL1_ID, USER_ID));
-    }
-
-    @Test
-    public void getWithNotFoundUser() {
-        assertThrows(UnsupportedOperationException.class, () -> service.getWithUser(NOT_FOUND, USER_ID));
-    }
 }
