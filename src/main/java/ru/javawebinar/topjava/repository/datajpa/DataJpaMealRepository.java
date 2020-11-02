@@ -30,7 +30,6 @@ public class DataJpaMealRepository implements MealRepository {
     }
 
     @Override
-    @Transactional
     public boolean delete(int id, int userId) {
         return crudMealRepository.delete(id, userId) != 0;
     }
@@ -53,7 +52,6 @@ public class DataJpaMealRepository implements MealRepository {
     }
 
     @Override
-    @Transactional
     public Meal getOneWithUser(int id, int userId) {
         return crudMealRepository.getOneWithUser(id, userId);
     }
