@@ -38,7 +38,6 @@ public class JdbcMealRepository implements MealRepository {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
-
     @Override
     @Transactional
     public boolean delete(int id, int userId) {
