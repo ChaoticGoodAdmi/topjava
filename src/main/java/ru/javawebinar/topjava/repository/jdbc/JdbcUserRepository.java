@@ -16,6 +16,8 @@ import ru.javawebinar.topjava.repository.UserRepository;
 
 import java.util.*;
 
+import static ru.javawebinar.topjava.util.ValidationUtil.validateBeanManually;
+
 @Repository
 @Transactional(readOnly = true)
 public class JdbcUserRepository implements UserRepository {
@@ -42,6 +44,7 @@ public class JdbcUserRepository implements UserRepository {
     @Override
     @Transactional
     public User save(User user) {
+        validateBeanManually(user);
         BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
 
         if (user.isNew()) {
@@ -50,9 +53,9 @@ public class JdbcUserRepository implements UserRepository {
             insertRoles(user);
         } else {
             if (namedParameterJdbcTemplate.update("""
-                   UPDATE users SET name=:name, email=:email, password=:password, 
-                   registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id
-                """, parameterSource) == 0) {
+                       UPDATE users SET name=:name, email=:email, password=:password, 
+                       registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id
+                    """, parameterSource) == 0) {
                 return null;
             }
             jdbcTemplate.update("DELETE FROM user_roles WHERE user_id = ?", user.getId());
