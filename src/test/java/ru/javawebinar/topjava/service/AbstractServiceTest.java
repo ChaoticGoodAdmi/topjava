@@ -30,10 +30,6 @@ abstract public class AbstractServiceTest {
 
     @Rule
     public Stopwatch stopwatch = TimingRules.STOPWATCH;
-/*
-    @Autowired
-    private Environment environment;
-*/
 
     //  Check root cause in JUnit: https://github.com/junit-team/junit4/pull/778
     public <T extends Throwable> void validateRootCause(Runnable runnable, Class<T> rootExceptionClass) {
@@ -45,9 +41,4 @@ abstract public class AbstractServiceTest {
             }
         });
     }
-/*
-    protected boolean isJpaProfileEnabled() {
-        return environment.acceptsProfiles(org.springframework.core.env.Profiles.of(DATAJPA, JPA));
-    }
-*/
 }
