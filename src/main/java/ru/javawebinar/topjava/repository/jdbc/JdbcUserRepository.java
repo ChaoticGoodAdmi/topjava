@@ -74,9 +74,7 @@ public class JdbcUserRepository implements UserRepository {
         List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE id=?", ROW_MAPPER, id);
         users.forEach(this::setRoles);
         User resultUser = DataAccessUtils.singleResult(users);
-        if (resultUser != null) {
-            setRoles(resultUser);
-        }
+        setRoles(resultUser);
         return resultUser;
     }
 
@@ -85,9 +83,7 @@ public class JdbcUserRepository implements UserRepository {
 //        return jdbcTemplate.queryForObject("SELECT * FROM users WHERE email=?", ROW_MAPPER, email);
         List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE email=?", ROW_MAPPER, email);
         User resultUser = DataAccessUtils.singleResult(users);
-        if (resultUser != null) {
-            setRoles(resultUser);
-        }
+        setRoles(resultUser);
         return resultUser;
     }
 
@@ -117,7 +113,9 @@ public class JdbcUserRepository implements UserRepository {
     }
 
     private void setRoles(User user) {
-        user.setRoles(getRoles(user));
+        if (user != null) {
+            user.setRoles(getRoles(user));
+        }
     }
 
     private void insertRoles(User user) {
