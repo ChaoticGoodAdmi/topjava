@@ -72,9 +72,12 @@ public class JdbcUserRepository implements UserRepository {
     @Override
     public User get(int id) {
         List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE id=?", ROW_MAPPER, id);
-        users.forEach(this::setRoles);
-        User resultUser = DataAccessUtils.singleResult(users);
-        setRoles(resultUser);
+        users.forEach(user -> {
+            if (user != null) {
+                user.setRoles(getRoles(user));
+            }
+        });
+        User resultUser = setRoles(users);
         return resultUser;
     }
 
@@ -82,8 +85,15 @@ public class JdbcUserRepository implements UserRepository {
     public User getByEmail(String email) {
 //        return jdbcTemplate.queryForObject("SELECT * FROM users WHERE email=?", ROW_MAPPER, email);
         List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE email=?", ROW_MAPPER, email);
+        User resultUser = setRoles(users);
+        return resultUser;
+    }
+
+    private User setRoles(List<User> users) {
         User resultUser = DataAccessUtils.singleResult(users);
-        setRoles(resultUser);
+        if (resultUser != null) {
+            resultUser.setRoles(getRoles(resultUser));
+        }
         return resultUser;
     }
 
@@ -110,12 +120,6 @@ public class JdbcUserRepository implements UserRepository {
     private Set<Role> getRoles(User user) {
         List<Role> query = jdbcTemplate.query("SELECT * FROM user_roles ur WHERE ur.USER_ID=?", ROLE_ROW_MAPPER, user.getId());
         return new HashSet<>(query);
-    }
-
-    private void setRoles(User user) {
-        if (user != null) {
-            user.setRoles(getRoles(user));
-        }
     }
 
     private void insertRoles(User user) {
