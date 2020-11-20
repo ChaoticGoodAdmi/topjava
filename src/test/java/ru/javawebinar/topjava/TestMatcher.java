@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static ru.javawebinar.topjava.TestUtil.readListFromJsonMvcResult;
 
 public class TestMatcher<T> {
+
     private final Class<T> clazz;
     private final String[] fieldsToIgnore;
 
@@ -18,6 +19,10 @@ public class TestMatcher<T> {
 
     public static <T> TestMatcher<T> usingIgnoringFieldsComparator(Class<T> clazz, String... fieldsToIgnore) {
         return new TestMatcher<>(clazz, fieldsToIgnore);
+    }
+
+    public static <T> TestMatcher<T> usingAllFields(Class<T> clazz) {
+        return new TestMatcher<>(clazz, "");
     }
 
     public void assertMatch(T actual, T expected) {
