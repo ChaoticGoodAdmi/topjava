@@ -40,7 +40,8 @@ $(function () {
                     "asc"
                 ]
             ]
-        })
+        }),
+        update: () => $.get(ajaxUrl, updateTable)
     };
     makeEditable(ctx);
 });
@@ -50,7 +51,7 @@ function changeEnabled(userId, value) {
         type: "POST",
         url: ajaxUrl + userId,
         data: "value=" + value
-    }).done(function () {
+    }).done(() => {
         $.get(ajaxUrl, updateTable);
         let textMsg = "User " + userId;
         successNoty(value ? textMsg + " enabled" : textMsg + " disabled");

@@ -26,7 +26,7 @@ function deleteRow(id) {
     $.ajax({
         url: ctx.ajaxUrl + id,
         type: "DELETE"
-    }).done(function () {
+    }).done(() => {
         currentCtx.update();
         successNoty("Deleted");
     });
@@ -41,7 +41,7 @@ function save() {
         type: "POST",
         url: ctx.ajaxUrl,
         data: form.serialize()
-    }).done(function () {
+    }).done(() => {
         $("#editRow").modal("hide");
         currentCtx.update();
         successNoty("Saved");
