@@ -40,7 +40,6 @@ public class MealUIController extends AbstractMealController {
         if (meal.isNew()) {
             super.create(meal);
         }
-        super.update(meal, id);
     }
 
     @Override

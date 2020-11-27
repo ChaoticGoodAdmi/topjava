@@ -35,3 +35,11 @@ $(function () {
     };
     makeEditable();
 });
+
+function filter() {
+    $.ajax({
+        type: "GET",
+        url: "user/meals/filter",
+        data: $('#filter').serialize()
+    }).done(updateTable);
+}

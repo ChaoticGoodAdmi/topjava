@@ -36,7 +36,7 @@
                 </form>
             </div>
             <div class="card-footer text-right mb-0">
-                <button class="btn btn-primary" type="submit"><spring:message code="meal.filter"/></button>
+                <button class="btn btn-primary" onclick="filter()"><spring:message code="meal.filter"/></button>
             </div>
         </div>
         <hr>
