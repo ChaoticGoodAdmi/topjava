@@ -1,4 +1,4 @@
-var form;
+let form;
 
 function makeEditable() {
     form = $('#detailsForm');
@@ -49,7 +49,7 @@ function save() {
     });
 }
 
-var failedNote;
+let failedNote;
 
 function closeNoty() {
     if (failedNote) {
