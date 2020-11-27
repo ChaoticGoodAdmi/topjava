@@ -31,9 +31,10 @@ $(function () {
                     "desc"
                 ]
             ]
-        })
+        }),
+        update: filter
     };
-    makeEditable();
+    makeEditable(ctx);
 });
 
 function filter() {
@@ -42,4 +43,9 @@ function filter() {
         url: "user/meals/filter",
         data: $('#filter').serialize()
     }).done(updateTable);
+}
+
+function clearFilter() {
+    $("#filter")[0].reset();
+    $.get(ctx.ajaxUrl, updateTable);
 }

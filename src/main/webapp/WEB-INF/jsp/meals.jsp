@@ -18,24 +18,25 @@
                     <div class="row mb-3">
                         <div class="offset-1 col-2">
                             <label><spring:message code="meal.startDate"/>:
-                            <input class="form-control" type="date" name="startDate" value="${param.startDate}"></label>
+                            <input class="form-control" type="date" name="startDate"></label>
                         </div>
                         <div class="col-2">
                             <label><spring:message code="meal.endDate"/>:
-                            <input class="form-control" type="date" name="endDate" value="${param.endDate}"></label>
+                            <input class="form-control" type="date" name="endDate"></label>
                         </div>
                         <div class="offset-1 col-2">
                             <label><spring:message code="meal.startTime"/>:
-                            <input class="form-control" type="time" name="startTime" value="${param.startTime}"></label>
+                            <input class="form-control" type="time" name="startTime"></label>
                         </div>
                         <div class="col-2">
                             <label><spring:message code="meal.endTime"/>:
-                            <input class="form-control" type="time" name="endTime" value="${param.endTime}"></label>
+                            <input class="form-control" type="time" name="endTime"></label>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="card-footer text-right mb-0">
+                <button class="btn btn-danger" onclick="clearFilter()"><spring:message code="common.cancel"/></button>
                 <button class="btn btn-primary" onclick="filter()"><spring:message code="meal.filter"/></button>
             </div>
         </div>

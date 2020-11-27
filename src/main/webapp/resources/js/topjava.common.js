@@ -1,6 +1,7 @@
-let form;
+let form, currentCtx;
 
-function makeEditable() {
+function makeEditable(ctx) {
+    currentCtx = ctx;
     form = $('#detailsForm');
     $(".delete").click(function () {
         if (confirm('Are you sure?')) {
@@ -26,7 +27,7 @@ function deleteRow(id) {
         url: ctx.ajaxUrl + id,
         type: "DELETE"
     }).done(function () {
-        $.get(ctx.ajaxUrl).done(updateTable);
+        currentCtx.update();
         successNoty("Deleted");
     });
 }
@@ -42,7 +43,7 @@ function save() {
         data: form.serialize()
     }).done(function () {
         $("#editRow").modal("hide");
-        $.get(ctx.ajaxUrl).done(updateTable);
+        currentCtx.update();
         successNoty("Saved");
     });
 }
