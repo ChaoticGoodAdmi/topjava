@@ -7,6 +7,9 @@
 #### get Users 100001
 `curl -s http://localhost:8080/topjava/rest/admin/users/100001 --user admin@gmail.com:admin`
 
+#### update user 100000 status
+curl --location --request POST 'http://localhost:8080/topjava/rest/admin/users/100000/?enabled=true' --header 'Authorization: Basic YWRtaW5AZ21haWwuY29tOmFkbWlu'
+
 #### get All Meals
 `curl -s http://localhost:8080/topjava/rest/profile/meals --user user@yandex.ru:password`
 

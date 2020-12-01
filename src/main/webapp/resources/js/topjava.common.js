@@ -23,13 +23,15 @@ function add() {
 }
 
 function deleteRow(id) {
-    $.ajax({
-        url: ctx.ajaxUrl + id,
-        type: "DELETE"
-    }).done(() => {
-        currentCtx.update();
-        successNoty("Deleted");
-    });
+    if (confirm('Are you sure?')) {
+        $.ajax({
+            url: ctx.ajaxUrl + id,
+            type: "DELETE"
+        }).done(() => {
+            currentCtx.update();
+            successNoty("Deleted");
+        });
+    }
 }
 
 function updateTable(data) {

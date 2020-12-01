@@ -51,7 +51,7 @@ function changeEnabled(userId, checkbox) {
     $.ajax({
         type: "POST",
         url: ajaxUrl + userId,
-        data: "value=" + newValue
+        data: "enabled=" + newValue
     }).done(() => {
         let rowClassList = checkbox.closest("tr").get(0).classList;
         if (newValue) {

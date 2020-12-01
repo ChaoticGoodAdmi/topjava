@@ -36,7 +36,7 @@ public class AdminUIController extends AbstractUserController {
     @Override
     @PostMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void changeEnabled(@PathVariable int id, @RequestParam boolean value) {
-        super.changeEnabled(id, value);
+    public void changeEnabled(@PathVariable int id, @RequestParam boolean enabled) {
+        super.changeEnabled(id, enabled);
     }
 }
