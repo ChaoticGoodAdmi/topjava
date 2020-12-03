@@ -1,15 +1,17 @@
 package ru.javawebinar.topjava.web.meal;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.util.ValidationUtil;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -24,6 +26,12 @@ public class MealUIController extends AbstractMealController {
     }
 
     @Override
+    @GetMapping(value = "/{id}")
+    public Meal get(@PathVariable("id") int id) {
+        return super.get(id);
+    }
+
+    @Override
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
@@ -32,10 +40,8 @@ public class MealUIController extends AbstractMealController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void create(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
-                       @RequestParam String description,
-                       @RequestParam int calories) {
-        super.create(new Meal(null, dateTime, description, calories));
+    public ResponseEntity<String> createOrUpdate(@Valid Meal meal, BindingResult result) {
+        return ValidationUtil.getValidationResponse(meal, result, this::save);
     }
 
     @Override
@@ -46,5 +52,13 @@ public class MealUIController extends AbstractMealController {
             @RequestParam @Nullable LocalDate endDate,
             @RequestParam @Nullable LocalTime endTime) {
         return super.getBetween(startDate, startTime, endDate, endTime);
+    }
+
+    private void save(Meal meal) {
+        if (meal.isNew()) {
+            super.create(meal);
+        } else {
+            super.update(meal, meal.id());
+        }
     }
 }
