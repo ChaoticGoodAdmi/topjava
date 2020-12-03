@@ -1,6 +1,16 @@
+var ctx;
+
+function updateFilteredTable() {
+    $.ajax({
+        type: "GET",
+        url: "profile/meals/filter",
+        data: $("#filter").serialize()
+    }).done(updateTableByData);
+}
+
 $(function () {
     ctx = {
-        ajaxUrl: "user/meals/",
+        ajaxUrl: "profile/meals/",
         datatableApi: $("#datatable").DataTable({
             "paging": false,
             "info": true,
@@ -26,10 +36,11 @@ $(function () {
             "order": [
                 [
                     0,
-                    "asc"
+                    "desc"
                 ]
             ]
-        })
-    }
+        }),
+        updateTable: updateFilteredTable
+    };
     makeEditable();
 });
