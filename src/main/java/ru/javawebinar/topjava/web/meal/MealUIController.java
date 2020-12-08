@@ -27,7 +27,7 @@ public class MealUIController extends AbstractMealController {
 
     @Override
     @GetMapping(value = "/{id}")
-    public Meal get(@PathVariable("id") int id) {
+    public Meal get(int id) {
         return super.get(id);
     }
 
@@ -44,6 +44,14 @@ public class MealUIController extends AbstractMealController {
         return ValidationUtil.getValidationResponse(meal, result, this::save);
     }
 
+    private void save(Meal meal) {
+        if (meal.isNew()) {
+            super.create(meal);
+        } else {
+            super.update(meal, meal.id());
+        }
+    }
+
     @Override
     @GetMapping(value = "/filter")
     public List<MealTo> getBetween(
@@ -52,13 +60,5 @@ public class MealUIController extends AbstractMealController {
             @RequestParam @Nullable LocalDate endDate,
             @RequestParam @Nullable LocalTime endTime) {
         return super.getBetween(startDate, startTime, endDate, endTime);
-    }
-
-    private void save(Meal meal) {
-        if (meal.isNew()) {
-            super.create(meal);
-        } else {
-            super.update(meal, meal.id());
-        }
     }
 }

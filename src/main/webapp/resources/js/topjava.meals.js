@@ -1,6 +1,11 @@
 let ctx;
 let mealAjaxUrl = "profile/meals/";
 
+let startDate = $("#startDate");
+let endDate = $("#endDate");
+let startTime = $("#startTime");
+let endTime = $("#endTime");
+
 function updateFilteredTable() {
     $.ajax({
         type: "GET",
@@ -9,6 +14,7 @@ function updateFilteredTable() {
     }).done(updateTableByData);
 
 }
+
 function clearFilter() {
     $("#filter")[0].reset();
     $.get(mealAjaxUrl, updateTableByData);
@@ -58,9 +64,7 @@ $(function () {
                 ]
             ],
             "createdRow": function (row, data) {
-                if (!data.enabled) {
-                    $(row).attr("data-mealExcess", data.excess);
-                }
+                $(row).attr("data-mealExcess", data.excess);
             }
         }),
         updateTable: updateFilteredTable
@@ -74,17 +78,40 @@ $('#dateTime').datetimepicker({
 
 $('#startDate').datetimepicker({
     timepicker: false,
-    format: "Y-m-d"
+    format: "Y-m-d",
+    onShow() {
+        this.setOptions({
+            maxDate: endDate.val() ? endDate.val() : false
+        })
+    }
 });
+
 $('#endDate').datetimepicker({
     timepicker: false,
-    format: "Y-m-d"
+    format: "Y-m-d",
+    onShow() {
+        this.setOptions({
+            minDate: startDate.val() ? startDate.val() : false
+        })
+    }
 });
+
 $('#startTime').datetimepicker({
     datepicker: false,
-    format: "H:i"
+    format: "H:i",
+    onShow() {
+        this.setOptions({
+            maxTime: endTime.val() ? endTime.val() : false
+        })
+    }
 });
+
 $('#endTime').datetimepicker({
     datepicker: false,
-    format: "H:i"
+    format: "H:i",
+    onShow() {
+        this.setOptions({
+            minTime: startTime.val() ? startTime.val() : false
+        })
+    }
 });
