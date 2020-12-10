@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.javawebinar.topjava.TestUtil.userAuth;
+import static ru.javawebinar.topjava.TestUtil.userHttpBasic;
 import static ru.javawebinar.topjava.UserTestData.admin;
 import static ru.javawebinar.topjava.UserTestData.user;
 
@@ -33,7 +34,7 @@ class RootControllerTest extends AbstractControllerTest {
     @Test
     void getMeals() throws Exception {
         perform(get("/meals")
-        .with(userAuth(user)))
+        .with(userHttpBasic(user)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("meals"))
