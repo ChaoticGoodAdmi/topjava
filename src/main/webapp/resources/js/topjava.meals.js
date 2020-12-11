@@ -68,6 +68,7 @@ $(function () {
 //  http://xdsoft.net/jqplugins/datetimepicker/
     var startDate = $('#startDate');
     var endDate = $('#endDate');
+    $.datetimepicker.setLocale(locale);
     startDate.datetimepicker({
         timepicker: false,
         format: 'Y-m-d',
