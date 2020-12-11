@@ -33,7 +33,7 @@ public class ProfileUIController extends AbstractUserController {
             status.setComplete();
             return "redirect:/meals";
         } catch (IllegalRequestDataException e) {
-            result.rejectValue("email", NON_UNIQUE_EMAIL_MESSAGE);
+            result.rejectValue("email", EMAIL_CONSTRAINT_VIOLATION);
             return "profile";
         }
     }
@@ -56,7 +56,7 @@ public class ProfileUIController extends AbstractUserController {
             status.setComplete();
             return "redirect:/login?message=app.registered&username=" + userTo.getEmail();
         } catch (IllegalRequestDataException e) {
-            result.rejectValue("email", NON_UNIQUE_EMAIL_MESSAGE);
+            result.rejectValue("email", EMAIL_CONSTRAINT_VIOLATION);
             model.addAttribute("register", true);
             return "profile";
         }

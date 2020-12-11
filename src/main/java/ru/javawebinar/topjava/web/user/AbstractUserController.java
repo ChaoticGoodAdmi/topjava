@@ -3,14 +3,10 @@ package ru.javawebinar.topjava.web.user;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.dao.DataIntegrityViolationException;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.UserService;
 import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.UserUtil;
-import ru.javawebinar.topjava.util.exception.IllegalRequestDataException;
 
 import java.util.List;
 
@@ -20,10 +16,7 @@ import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 public abstract class AbstractUserController {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
-    protected static final String NON_UNIQUE_EMAIL_MESSAGE = "user.nonUniqueEmail";
-
-    @Autowired
-    private MessageSource messageSource;
+    protected static final String EMAIL_CONSTRAINT_VIOLATION = "user.nonUniqueEmail";
 
     @Autowired
     private UserService service;
@@ -40,16 +33,7 @@ public abstract class AbstractUserController {
 
     public User create(UserTo userTo) {
         log.info("create from to {}", userTo);
-        try {
-            return create(UserUtil.createNewFromTo(userTo));
-        } catch (DataIntegrityViolationException e) {
-            return throwAppropriateException();
-        }
-    }
-
-    private User throwAppropriateException() {
-        throw new IllegalRequestDataException(
-                messageSource.getMessage(NON_UNIQUE_EMAIL_MESSAGE, null, LocaleContextHolder.getLocale()));
+        return create(UserUtil.createNewFromTo(userTo));
     }
 
     public User create(User user) {
@@ -66,23 +50,13 @@ public abstract class AbstractUserController {
     public void update(User user, int id) {
         log.info("update {} with id={}", user, id);
         assureIdConsistent(user, id);
-        try {
-            service.update(user);
-        } catch (DataIntegrityViolationException e) {
-            throw new IllegalRequestDataException(
-                    messageSource.getMessage(NON_UNIQUE_EMAIL_MESSAGE, null, LocaleContextHolder.getLocale()));
-        }
+        service.update(user);
     }
 
     public void update(UserTo userTo, int id) {
         log.info("update {} with id={}", userTo, id);
         assureIdConsistent(userTo, id);
-        try {
-            service.update(userTo);
-        } catch (DataIntegrityViolationException e) {
-            throw new IllegalRequestDataException(
-                    messageSource.getMessage(NON_UNIQUE_EMAIL_MESSAGE, null, LocaleContextHolder.getLocale()));
-        }
+        service.update(userTo);
     }
 
     public User getByMail(String email) {
