@@ -14,9 +14,12 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import ru.javawebinar.topjava.AllActiveProfileResolver;
 import ru.javawebinar.topjava.Profiles;
+import ru.javawebinar.topjava.util.exception.ErrorType;
 
 import javax.annotation.PostConstruct;
+import java.util.Locale;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 @SpringJUnitWebConfig(locations = {
@@ -34,6 +37,9 @@ public abstract class AbstractControllerTest {
 
     @Autowired
     public Environment env;
+
+    @Autowired
+    public LocaleUtil localeUtil;
 
     static {
         CHARACTER_ENCODING_FILTER.setEncoding("UTF-8");
@@ -60,5 +66,13 @@ public abstract class AbstractControllerTest {
 
     protected ResultActions perform(MockHttpServletRequestBuilder builder) throws Exception {
         return mockMvc.perform(builder);
+    }
+
+    protected void assertErrorType(String response, ErrorType errorType) {
+        assertTrue(response.contains(errorType.name()));
+    }
+
+    protected void assertErrorMessage(String response, String message) {
+        assertTrue(response.contains(localeUtil.getMessage(message, Locale.ENGLISH)));
     }
 }

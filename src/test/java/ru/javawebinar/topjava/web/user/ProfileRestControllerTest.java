@@ -3,12 +3,16 @@ package ru.javawebinar.topjava.web.user;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.UserService;
 import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.UserUtil;
+import ru.javawebinar.topjava.util.exception.ErrorType;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
@@ -66,6 +70,21 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void registerDuplicate() throws Exception {
+        UserTo newTo = new UserTo(null, "newName", admin.getEmail(), "newPassword", 1500);
+        MvcResult result = perform(MockMvcRequestBuilders.post(REST_URL + "/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newTo)))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andReturn();
+        String response = result.getResponse().getContentAsString();
+        assertErrorType(response, ErrorType.VALIDATION_ERROR);
+        assertErrorMessage(response, AbstractUserController.EMAIL_CONSTRAINT_VIOLATION);
+    }
+
+    @Test
     void update() throws Exception {
         UserTo updatedTo = new UserTo(null, "newName", "newemail@ya.ru", "newPassword", 1500);
         perform(MockMvcRequestBuilders.put(REST_URL).contentType(MediaType.APPLICATION_JSON)
@@ -79,12 +98,30 @@ class ProfileRestControllerTest extends AbstractControllerTest {
 
     @Test
     void updateInvalid() throws Exception {
-        UserTo updatedTo = new UserTo(null, null, "newemail@ya.ru", null, 0);
-        perform(MockMvcRequestBuilders.put(REST_URL).contentType(MediaType.APPLICATION_JSON)
+        UserTo updatedTo = new UserTo(null, null, user.getEmail(), "123", 0);
+        MvcResult result = perform(MockMvcRequestBuilders.put(REST_URL).contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(user))
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
-                .andExpect(status().isNoContent());
+                .andExpect(status().isUnprocessableEntity())
+                .andReturn();
+        String response = result.getResponse().getContentAsString();
+        assertErrorType(response, ErrorType.VALIDATION_ERROR);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void updateDuplicate() throws Exception {
+        UserTo updatedTo = new UserTo(null, "newName", admin.getEmail(), "newPassword", 1500);
+        MvcResult result = perform(MockMvcRequestBuilders.put(REST_URL).contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(user))
+                .content(JsonUtil.writeValue(updatedTo)))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andReturn();
+        String response = result.getResponse().getContentAsString();
+        assertErrorType(response, ErrorType.VALIDATION_ERROR);
+        assertErrorMessage(response, AbstractUserController.EMAIL_CONSTRAINT_VIOLATION);
     }
 
     @Test

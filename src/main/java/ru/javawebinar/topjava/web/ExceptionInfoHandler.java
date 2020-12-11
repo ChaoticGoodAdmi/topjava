@@ -56,7 +56,7 @@ public class ExceptionInfoHandler {
                 .filter(entry -> exceptionMessage.contains(entry.getKey()))
                 .findFirst();
         return entryMessage.map(entry ->
-                logAndGetErrorInfo(req, e, false, DATA_ERROR,
+                logAndGetErrorInfo(req, e, false, VALIDATION_ERROR,
                         localeUtil.getMessage(entry.getValue()))).orElseGet(
                                 () -> logAndGetErrorInfo(req, e, true, DATA_ERROR));
     }

@@ -3,11 +3,15 @@ package ru.javawebinar.topjava.web.user;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.UserService;
+import ru.javawebinar.topjava.util.exception.ErrorType;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
@@ -101,11 +105,30 @@ class AdminRestControllerTest extends AbstractControllerTest {
     @Test
     void updateInvalid() throws Exception {
         User updated = new User();
-        perform(MockMvcRequestBuilders.put(REST_URL + USER_ID)
+        MvcResult result = perform(MockMvcRequestBuilders.put(REST_URL + USER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(admin))
                 .content(JsonUtil.writeValue(updated)))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableEntity())
+                .andReturn();
+        String response = result.getResponse().getContentAsString();
+        assertErrorType(response, ErrorType.VALIDATION_ERROR);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void updateDuplicate() throws Exception {
+        User updated = new User(user);
+        updated.setEmail(admin.getEmail());
+        MvcResult result = perform(MockMvcRequestBuilders.put(REST_URL + USER_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(admin))
+                .content(jsonWithPassword(updated, "password")))
+                .andExpect(status().isConflict())
+                .andReturn();
+        String response = result.getResponse().getContentAsString();
+        assertErrorType(response, ErrorType.VALIDATION_ERROR);
+        assertErrorMessage(response, AbstractUserController.EMAIL_CONSTRAINT_VIOLATION);
     }
 
     @Test
@@ -127,11 +150,31 @@ class AdminRestControllerTest extends AbstractControllerTest {
     @Test
     void createInvalid() throws Exception {
         User newUser = new User();
-        perform(MockMvcRequestBuilders.post(REST_URL)
+        MvcResult result = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(admin))
-                .content(UserTestData.jsonWithPassword(newUser, "newPass")))
-                .andExpect(status().isUnprocessableEntity());
+                .content(jsonWithPassword(newUser, "newPass")))
+                .andExpect(status().isUnprocessableEntity())
+                .andReturn();
+        String response = result.getResponse().getContentAsString();
+        assertErrorType(response, ErrorType.VALIDATION_ERROR);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void createDuplicate() throws Exception {
+        User newUser = getNew();
+        newUser.setEmail(admin.getEmail());
+        MvcResult result = perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(admin))
+                .content(jsonWithPassword(newUser, "password")))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andReturn();
+        String response = result.getResponse().getContentAsString();
+        assertErrorType(response, ErrorType.VALIDATION_ERROR);
+        assertErrorMessage(response, AbstractUserController.EMAIL_CONSTRAINT_VIOLATION);
     }
 
     @Test
