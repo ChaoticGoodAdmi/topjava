@@ -26,6 +26,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 import static ru.javawebinar.topjava.UserTestData.user;
 import static ru.javawebinar.topjava.util.MealsUtil.createTo;
 import static ru.javawebinar.topjava.util.MealsUtil.getTos;
+import static ru.javawebinar.topjava.web.ExceptionInfoHandler.DATETIME_CONSTRAINT_VIOLATION;
 
 class MealRestControllerTest extends AbstractControllerTest {
 
@@ -111,7 +112,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andReturn();
         String response = result.getResponse().getContentAsString();
         assertErrorType(response, ErrorType.VALIDATION_ERROR);
-        assertErrorMessage(response, AbstractMealController.DATETIME_CONSTRAINT_VIOLATION);
+        assertErrorMessage(response, DATETIME_CONSTRAINT_VIOLATION);
     }
 
     @Test
@@ -156,7 +157,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andReturn();
         String response = result.getResponse().getContentAsString();
         assertErrorType(response, ErrorType.VALIDATION_ERROR);
-        assertErrorMessage(response, AbstractMealController.DATETIME_CONSTRAINT_VIOLATION);
+        assertErrorMessage(response, DATETIME_CONSTRAINT_VIOLATION);
     }
 
     @Test

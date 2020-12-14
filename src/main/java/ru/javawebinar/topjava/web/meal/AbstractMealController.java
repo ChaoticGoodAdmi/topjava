@@ -20,7 +20,7 @@ import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 public abstract class AbstractMealController {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
-    protected static final String DATETIME_CONSTRAINT_VIOLATION = "meal.nonUniqueDateTime";
+
 
     @Autowired
     private MealService service;

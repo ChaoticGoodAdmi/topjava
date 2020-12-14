@@ -1,4 +1,5 @@
 var form;
+let responseJson;
 
 function makeEditable(datatableOpts) {
     ctx.datatableApi = $("#datatable").DataTable(
@@ -20,7 +21,12 @@ function makeEditable(datatableOpts) {
     });
 
     // solve problem with cache in IE: https://stackoverflow.com/a/4303862/548473
-    $.ajaxSetup({cache: false});
+    $.ajaxSetup({
+        cache: false,
+        error(jqXHR) {
+            jqXHR.responseJson = jQuery.parseJSON(jqXHR.responseText);
+        }
+    });
 
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
@@ -95,8 +101,7 @@ function successNoty(key) {
 
 function failNoty(jqXHR) {
     closeNoty();
-    console.log(jqXHR.responseText);
-    const errorInfo = JSON.parse(jqXHR.responseText);
+    const errorInfo = jqXHR.responseJson;
     failedNote = new Noty({
         text: "<span class='fa fa-lg fa-exclamation-circle'></span> &nbsp;" + i18n["common.errorStatus"] + ": " + jqXHR.status +
             "<br>" + errorInfo.type + "<br>" + errorInfo.details.join("<br>"),

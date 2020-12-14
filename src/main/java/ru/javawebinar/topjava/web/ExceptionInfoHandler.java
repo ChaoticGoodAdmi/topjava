@@ -34,9 +34,13 @@ public class ExceptionInfoHandler {
 
     private static Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
 
+    public static final String EMAIL_CONSTRAINT_VIOLATION = "user.nonUniqueEmail";
+    public static final String DATETIME_CONSTRAINT_VIOLATION = "meal.nonUniqueDateTime";
+
+
     private static final Map<String, String> CONSTRAINTS = Map.of(
-            "users_unique_email_idx", "user.nonUniqueEmail",
-            "meals_unique_user_datetime_idx", "meal.nonUniqueDateTime");
+            "users_unique_email_idx", EMAIL_CONSTRAINT_VIOLATION ,
+            "meals_unique_user_datetime_idx", DATETIME_CONSTRAINT_VIOLATION);
 
     @Autowired
     private LocaleUtil localeUtil;
@@ -92,6 +96,6 @@ public class ExceptionInfoHandler {
         } else {
             log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
         }
-        return new ErrorInfo(req.getRequestURL(), errorType, details.length > 0 ? details : new String[]{rootCause.toString()});
+        return new ErrorInfo(req.getRequestURL(), errorType, details.length > 0 ? details : new String[]{rootCause.getLocalizedMessage()});
     }
 }

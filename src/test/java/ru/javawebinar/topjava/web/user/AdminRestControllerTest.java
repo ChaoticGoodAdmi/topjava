@@ -24,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.javawebinar.topjava.TestUtil.readFromJson;
 import static ru.javawebinar.topjava.TestUtil.userHttpBasic;
 import static ru.javawebinar.topjava.UserTestData.*;
+import static ru.javawebinar.topjava.web.ExceptionInfoHandler.EMAIL_CONSTRAINT_VIOLATION;
 
 class AdminRestControllerTest extends AbstractControllerTest {
 
@@ -128,7 +129,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .andReturn();
         String response = result.getResponse().getContentAsString();
         assertErrorType(response, ErrorType.VALIDATION_ERROR);
-        assertErrorMessage(response, AbstractUserController.EMAIL_CONSTRAINT_VIOLATION);
+        assertErrorMessage(response, EMAIL_CONSTRAINT_VIOLATION);
     }
 
     @Test
@@ -174,7 +175,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .andReturn();
         String response = result.getResponse().getContentAsString();
         assertErrorType(response, ErrorType.VALIDATION_ERROR);
-        assertErrorMessage(response, AbstractUserController.EMAIL_CONSTRAINT_VIOLATION);
+        assertErrorMessage(response, EMAIL_CONSTRAINT_VIOLATION);
     }
 
     @Test

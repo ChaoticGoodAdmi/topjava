@@ -16,7 +16,6 @@ import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 public abstract class AbstractUserController {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
-    protected static final String EMAIL_CONSTRAINT_VIOLATION = "user.nonUniqueEmail";
 
     @Autowired
     private UserService service;
