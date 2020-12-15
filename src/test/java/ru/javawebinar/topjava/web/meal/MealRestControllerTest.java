@@ -26,7 +26,6 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 import static ru.javawebinar.topjava.UserTestData.user;
 import static ru.javawebinar.topjava.util.MealsUtil.createTo;
 import static ru.javawebinar.topjava.util.MealsUtil.getTos;
-import static ru.javawebinar.topjava.web.ExceptionInfoHandler.DATETIME_CONSTRAINT_VIOLATION;
 
 class MealRestControllerTest extends AbstractControllerTest {
 
@@ -95,8 +94,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
                 .andReturn();
-        String response = result.getResponse().getContentAsString();
-        assertErrorType(response, ErrorType.VALIDATION_ERROR);
+        assertError(result, ErrorType.VALIDATION_ERROR);
     }
 
     @Test
@@ -110,9 +108,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isConflict())
                 .andReturn();
-        String response = result.getResponse().getContentAsString();
-        assertErrorType(response, ErrorType.VALIDATION_ERROR);
-        assertErrorMessage(response, DATETIME_CONSTRAINT_VIOLATION);
+        assertError(result, ErrorType.VALIDATION_ERROR);
     }
 
     @Test
@@ -139,8 +135,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(user)))
                 .andExpect(status().isUnprocessableEntity())
                 .andReturn();
-        String response = result.getResponse().getContentAsString();
-        assertErrorType(response, ErrorType.VALIDATION_ERROR);
+        assertError(result, ErrorType.VALIDATION_ERROR);
     }
 
     @Test
@@ -155,9 +150,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isConflict())
                 .andReturn();
-        String response = result.getResponse().getContentAsString();
-        assertErrorType(response, ErrorType.VALIDATION_ERROR);
-        assertErrorMessage(response, DATETIME_CONSTRAINT_VIOLATION);
+        assertError(result, ErrorType.VALIDATION_ERROR);
     }
 
     @Test

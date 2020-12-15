@@ -24,7 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.javawebinar.topjava.TestUtil.readFromJson;
 import static ru.javawebinar.topjava.TestUtil.userHttpBasic;
 import static ru.javawebinar.topjava.UserTestData.*;
-import static ru.javawebinar.topjava.web.ExceptionInfoHandler.EMAIL_CONSTRAINT_VIOLATION;
 
 class AdminRestControllerTest extends AbstractControllerTest {
 
@@ -97,7 +96,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.put(REST_URL + USER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(admin))
-                .content(jsonWithPassword(updated, user.getPassword())))
+                .content(jsonWithPassword(updated, updated.getPassword())))
                 .andExpect(status().isNoContent());
 
         USER_MATCHER.assertMatch(userService.get(USER_ID), updated);
@@ -112,8 +111,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isUnprocessableEntity())
                 .andReturn();
-        String response = result.getResponse().getContentAsString();
-        assertErrorType(response, ErrorType.VALIDATION_ERROR);
+        assertError(result, ErrorType.VALIDATION_ERROR);
     }
 
     @Test
@@ -127,9 +125,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .content(jsonWithPassword(updated, "password")))
                 .andExpect(status().isConflict())
                 .andReturn();
-        String response = result.getResponse().getContentAsString();
-        assertErrorType(response, ErrorType.VALIDATION_ERROR);
-        assertErrorMessage(response, EMAIL_CONSTRAINT_VIOLATION);
+        assertError(result, ErrorType.VALIDATION_ERROR);
     }
 
     @Test
@@ -157,8 +153,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .content(jsonWithPassword(newUser, "newPass")))
                 .andExpect(status().isUnprocessableEntity())
                 .andReturn();
-        String response = result.getResponse().getContentAsString();
-        assertErrorType(response, ErrorType.VALIDATION_ERROR);
+        assertError(result, ErrorType.VALIDATION_ERROR);
     }
 
     @Test
@@ -173,9 +168,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isConflict())
                 .andReturn();
-        String response = result.getResponse().getContentAsString();
-        assertErrorType(response, ErrorType.VALIDATION_ERROR);
-        assertErrorMessage(response, EMAIL_CONSTRAINT_VIOLATION);
+        assertError(result, ErrorType.VALIDATION_ERROR);
     }
 
     @Test

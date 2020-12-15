@@ -2,7 +2,8 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -10,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,19 +31,22 @@ import static ru.javawebinar.topjava.util.exception.ErrorType.*;
 @RestControllerAdvice(annotations = RestController.class)
 @Order(Ordered.HIGHEST_PRECEDENCE + 5)
 public class ExceptionInfoHandler {
-
-    private static Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
-
     public static final String EMAIL_CONSTRAINT_VIOLATION = "user.nonUniqueEmail";
     public static final String DATETIME_CONSTRAINT_VIOLATION = "meal.nonUniqueDateTime";
-
 
     private static final Map<String, String> CONSTRAINTS = Map.of(
             "users_unique_email_idx", EMAIL_CONSTRAINT_VIOLATION ,
             "meals_unique_user_datetime_idx", DATETIME_CONSTRAINT_VIOLATION);
 
-    @Autowired
-    private LocaleUtil localeUtil;
+    private static Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
+
+    private final MessageSource messageSource;
+    private final MessageSourceAccessor messageSourceAccessor;
+
+    public ExceptionInfoHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
+        this.messageSourceAccessor = new MessageSourceAccessor(messageSource);
+    }
 
     //  http://stackoverflow.com/a/22358422/548473
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
@@ -61,7 +64,7 @@ public class ExceptionInfoHandler {
                 .findFirst();
         return entryMessage.map(entry ->
                 logAndGetErrorInfo(req, e, false, VALIDATION_ERROR,
-                        localeUtil.getMessage(entry.getValue()))).orElseGet(
+                        messageSourceAccessor.getMessage(entry.getValue()))).orElseGet(
                                 () -> logAndGetErrorInfo(req, e, true, DATA_ERROR));
     }
 
@@ -78,10 +81,9 @@ public class ExceptionInfoHandler {
     }
 
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
-    @ExceptionHandler({BindException.class, MethodArgumentNotValidException.class})
+    @ExceptionHandler(BindException.class)
     public ErrorInfo bindExceptionError(HttpServletRequest req, Exception e) {
-        BindingResult result = e instanceof BindException ?
-                ((BindException) e).getBindingResult() : ((MethodArgumentNotValidException) e).getBindingResult();
+        BindingResult result = ((BindException) e).getBindingResult();
         String[] details = result.getFieldErrors().stream()
                 .map(fe -> String.format("[%s] %s", fe.getField(), fe.getDefaultMessage()))
                 .toArray(String[]::new);

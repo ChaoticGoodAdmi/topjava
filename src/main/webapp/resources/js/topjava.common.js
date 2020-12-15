@@ -1,5 +1,4 @@
 var form;
-let responseJson;
 
 function makeEditable(datatableOpts) {
     ctx.datatableApi = $("#datatable").DataTable(

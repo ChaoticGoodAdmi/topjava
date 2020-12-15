@@ -22,7 +22,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.javawebinar.topjava.TestUtil.readFromJson;
 import static ru.javawebinar.topjava.TestUtil.userHttpBasic;
 import static ru.javawebinar.topjava.UserTestData.*;
-import static ru.javawebinar.topjava.web.ExceptionInfoHandler.EMAIL_CONSTRAINT_VIOLATION;
 import static ru.javawebinar.topjava.web.user.ProfileRestController.REST_URL;
 
 class ProfileRestControllerTest extends AbstractControllerTest {
@@ -80,9 +79,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isConflict())
                 .andReturn();
-        String response = result.getResponse().getContentAsString();
-        assertErrorType(response, ErrorType.VALIDATION_ERROR);
-        assertErrorMessage(response, EMAIL_CONSTRAINT_VIOLATION);
+        assertError(result, ErrorType.VALIDATION_ERROR);
     }
 
     @Test
@@ -106,8 +103,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
                 .andReturn();
-        String response = result.getResponse().getContentAsString();
-        assertErrorType(response, ErrorType.VALIDATION_ERROR);
+        assertError(result, ErrorType.VALIDATION_ERROR);
     }
 
     @Test
@@ -120,9 +116,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isConflict())
                 .andReturn();
-        String response = result.getResponse().getContentAsString();
-        assertErrorType(response, ErrorType.VALIDATION_ERROR);
-        assertErrorMessage(response, EMAIL_CONSTRAINT_VIOLATION);
+        assertError(result, ErrorType.VALIDATION_ERROR);
     }
 
     @Test
